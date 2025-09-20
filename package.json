@@ -3,16 +3,14 @@
   "version": "1.0.0",
   "description": "GradNet Alumni Connect - Full Stack Application",
   "scripts": {
-    "install-client": "cd . && npm install",
-    "install-server": "cd backend && npm install", 
-    "install": "npm run install-client && npm run install-server",
-    "build": "npm run build-client",
-    "build-client": "vite build",
+    "dev": "vite",
+    "build": "vite build",
+    "build:dev": "vite build --mode development",
+    "lint": "eslint .",
+    "preview": "vite preview",
     "start": "cd backend && npm start",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd backend && npm run dev",
-    "client": "vite",
-    "heroku-postbuild": "npm run install && npm run build"
+    "dev-full": "concurrently \"npm run server\" \"npm run dev\""
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
