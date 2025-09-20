@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import { useAuth } from './AuthContext';
+import { config } from '../config/api';
 
 export interface FollowCounts {
   followersCount: number;
@@ -45,7 +46,7 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
   const [loading, setLoading] = useState(false);
   const [followDataVersion, setFollowDataVersion] = useState(0);
 
-  const API_BASE_URL = 'http://localhost:5000/api';
+  const API_BASE_URL = config.apiUrl;
 
   const refreshFollowData = useCallback(() => {
     setFollowDataVersion(prev => prev + 1);

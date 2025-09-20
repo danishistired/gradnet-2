@@ -7,12 +7,28 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const JWT_SECRET = 'your-super-secret-jwt-key'; // In production, use environment variable
+const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:8080';
+
+// CORS configuration for production
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' 
+    ? [FRONTEND_URL, 'https://gradnet-frontend.onrender.com']
+    : ['http://localhost:8080', 'http://localhost:3000', 'http://127.0.0.1:8080'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
 
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' })); // Increased limit for image uploads
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
+// Serve static files from React app in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../dist')));
+}
 
 // Database file path (using JSON file for simplicity)
 const DB_FILE = path.join(__dirname, 'database.json');
@@ -2427,8 +2443,16 @@ initializeDB().then(async () => {
     }
   });
 
+  // Catch-all handler for React Router (must be last!)
+  if (process.env.NODE_ENV === 'production') {
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, '../dist/index.html'));
+    });
+  }
+
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   });
 });
 

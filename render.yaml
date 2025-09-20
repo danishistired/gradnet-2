@@ -1,0 +1,43 @@
+services:
+  # Backend API Service
+  - type: web
+    name: gradnet-backend
+    env: node
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        fromService:
+          type: web
+          name: gradnet-frontend
+          property: host
+    
+  # Frontend Web Service  
+  - type: web
+    name: gradnet-frontend
+    env: static
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: gradnet-backend
+          property: host
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+databases:
+  # For future database integration if needed
+  # - name: gradnet-db
+  #   plan: free

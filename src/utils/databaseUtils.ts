@@ -1,4 +1,5 @@
 // Utility functions to read data from database.json file
+import { config } from '../config/api';
 
 export interface DatabaseUser {
   id: string;
@@ -33,7 +34,7 @@ export interface DatabaseData {
 export const fetchDatabaseData = async (): Promise<DatabaseData> => {
   try {
     // First try to fetch from the backend API
-    const apiResponse = await fetch('http://localhost:5000/api/admin/all-users');
+    const apiResponse = await fetch(`${config.apiUrl}/admin/all-users`);
     if (apiResponse.ok) {
       const apiData = await apiResponse.json();
       if (apiData.success) {

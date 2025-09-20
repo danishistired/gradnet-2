@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { config } from '../config/api';
 import {
   Table,
   TableBody,
@@ -148,7 +149,7 @@ const AdminDashboard = () => {
     setIsLoading(true);
     try {
       // Try to fetch from API first (if backend server is running)
-      const response = await fetch('http://localhost:5000/api/admin/pending-alumni');
+      const response = await fetch(`${config.apiUrl}/admin/pending-alumni`);
       if (response.ok) {
         const data = await response.json();
         
@@ -185,7 +186,7 @@ const AdminDashboard = () => {
 
   const handleApproveUser = async (userId: string) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/admin/approve-alumni/${userId}`, {
+      const response = await fetch(`${config.apiUrl}/admin/approve-alumni/${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -210,7 +211,7 @@ const AdminDashboard = () => {
     try {
       const reason = prompt('Please provide a reason for rejection (optional):');
       
-      const response = await fetch(`http://localhost:5000/api/admin/reject-alumni/${userId}`, {
+      const response = await fetch(`${config.apiUrl}/admin/reject-alumni/${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

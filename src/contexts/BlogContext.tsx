@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { useAuth } from './AuthContext';
+import { config } from '../config/api';
 
 interface Author {
   id: string;
@@ -112,7 +113,7 @@ export const BlogProvider: React.FC<BlogProviderProps> = ({ children }) => {
     sortBy: 'latest'
   });
 
-  const API_BASE_URL = 'http://localhost:5000/api';
+  const API_BASE_URL = config.apiUrl;
 
   const fetchPosts = useCallback(async (page = 1) => {
     if (!token) return;
